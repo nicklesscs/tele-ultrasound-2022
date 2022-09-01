@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Accelerometer Demo</title>
+
+		<style>
+			.indicatorDot {
+				width: 30px;
+				height: 30px;
+				background-color: #ffab56;
+				border-radius: 50%;
+				position: fixed;
+			}
+		</style>
+
+		<script type="text/javascript" src="getAccel.js"></script>
+	</head>
+
+	<body style="background-color: lightblue" id="bdy">
+		<button id="accelPermsdiv" style="height: 80px; background-color: black; color: white">Get Accelerometer</button>
+		<div class="indicatorDot" style="left: 30%; top: 30%"></div>
+	</body>
+
+	<script>
+		const ws = new WebSocket('wss://horrible-quail-72.loca.lt');
+		var px = 50; // Position x and y
+		var py = 50;
+		var vx = 0.0; // Velocity x and y
+		var vy = 0.0;
+		var updateRate = 1 / 60; // Sensor refresh rate
+		var wsOpen = false;
+
+		var sendRate = 5;
+		var sendCount = 0;
+
+		ws.addEventListener('open', () => {
+			console.log('We are connected');
+			wsOpen = true;
+		});
+
+		function padVal(val) {
+			let num = val.toFixed(1);
+			return num.padStart(6, ' ');
+		}
+
+		window.onload = function () {
+			var d = document.getElementById('accelPermsdiv');
+			console.log(d.innerHTML);
+			d.addEventListener('click', function () {
+				t = document.getElementById('bdy');
+				var li = document.createElement('li');
+				li.innerHTML = 'test';
+				t.appendChild(li);
+				DeviceMotionEvent.requestPermission().then((response) => {
+					if (response == 'granted') {
+						// Add a listener to get smartphone orientation
+						// in the alpha-beta-gamma axes (units in degrees)
+						window.addEventListener('deviceorientation', (event) => {
+							// Expose each orientation angle in a more readable way
+							rotation_degrees = event.alpha;
+							frontToBack_degrees = event.beta;
+							leftToRight_degrees = event.gamma;
+
+							if (wsOpen) {
+								// ws.send(padVal(rotation_degrees) + ", " + padVal(leftToRight_degrees) + ", " + padVal(frontToBack_degrees));
+
+								var frontBack = Math.min(Math.max(frontToBack_degrees / -1.0, -20), 20);
+								var leftRight = Math.min(Math.max(leftToRight_degrees / -1.0, -20), 20);
+
+								if (sendCount == sendRate) {
+									sendCount = 0;
+									ws.send(
+										JSON.stringify({
+											pitch: frontBack,
+											roll: leftRight,
+										})
+									);
+								} else {
+									sendCount += 1;
+								}
+							}
+
+							// Update velocity according to how tilted the phone is
+							// Since phones are narrower than they are long, double the increase to the x velocity
+							vx = vx + leftToRight_degrees * updateRate * 2;
+							vy = vy + frontToBack_degrees * updateRate;
+
+							// Update position and clip it to bounds
+							px = px + vx * 0.2;
+							if (px > 98 || px < 0) {
+								px = Math.max(0, Math.min(98, px)); // Clip px between 0-98
+								vx = 0;
+							}
+
+							py = py + vy * 0.2;
+							if (py > 98 || py < 0) {
+								py = Math.max(0, Math.min(98, py)); // Clip py between 0-98
+								vy = 0;
+							}
+
+							dot = document.getElementsByClassName('indicatorDot')[0];
+							dot.setAttribute('style', 'left:' + px + '%;' + 'top:' + py + '%;');
+						});
+					}
+				});
+			});
+		};
+	</script>
+</html>
