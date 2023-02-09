@@ -3,38 +3,42 @@ import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 ###Dataset 1###
-raw_proximity = [104, 83, 72, 71, 63, 59.22, 54.909, 48.83, 
+raw_proximity1 = [104, 83, 72, 71, 63, 59.22, 54.909, 48.83, 
 45.66 ,41.07, 40.08, 36.17, 33.65,30.9, 29.596, 27.77, 24.71, 24.182,
 22.35, 20.77, 19.55, 18.51, 18.061, 17.77, 16.27, 15.576, 15.51333333,
 14.669, 13.97366667, 13.84233333, 13.04766667, 12.7, 11.739, 11.03166667, 
 10.63533333, 10.536, 9.818, 9.388833333, 8.6231, 8.605333333, 7.827133333, 
 7.4997, 6.6004, 6.6744, 6.516]
 
-measured_mm = [0, 4.36, 5.3, 6.37, 7.82, 8.55, 9.63, 11.38, 12.26, 13.76, 14.31, 15.67, 16.67,
+measured_mm1 = [0, 4.36, 5.3, 6.37, 7.82, 8.55, 9.63, 11.38, 12.26, 13.76, 14.31, 15.67, 16.67,
 17.77, 18.54, 19.38, 20.97, 21.99, 23.12, 24.53, 25.9, 26.82, 27.63, 28.03,
 29.76, 30.83, 30.74, 31.73, 32.81, 33.44, 34.5, 35.53, 36.7,37.93, 38.93,39.96,
 41, 42.7, 44.4,45.53,46.85, 49.47, 51.43, 52.74, 53.23]
 
-
-
-model = np.poly1d(np.polyfit(raw_proximity, measured_mm, 5))
+model1 = np.poly1d(np.polyfit(raw_proximity1, measured_mm1, 5))
 print("Encoder Polynomial Model = ")
-print(model)
+print("X Model 1",model1)
+print("========================")
 
-#add fitted polynomial line to scatterplot
+"""#add fitted polynomial line to scatterplot
 polyline = np.linspace(0, 110)       #polyline = np.linspace(1, 60, 50)
-plt.scatter(raw_proximity, measured_mm)
-plt.plot(polyline, model(polyline))
+plt.scatter(raw_proximity1, measured_mm1)
+plt.plot(polyline, model1(polyline))
 plt.xlim([0,110])
 plt.ylim([0,60])
-plt.title("X Encoder: mMeasured mm vs Proximity Value")
+plt.title("X Encoder Model 1: Measured mm vs Proximity Value")
 plt.ylabel("Measured mm")
 plt.xlabel("Raw Proximity Value")
 
 plt.show()
 
+y1 = np.polyval(model1,55)
+print("measured mm =", y1)"""
+
 ###Dataset2###
+
 raw_proximity2 = [6.333333333,7,7.666666667,7.75,7.75,7.75,8.5,8.75,9,9,9.5,9.5,9.714285714,9.857142857,10.71428571,11.14285714
                   ,11.85714286,11.85714286,12.71428571,13.42857143,13.85714286,14.85714286,15.57142857,15.71428571,16.85714286,
                   17.71428571,18.42857143,19.85714286,20.42857143,21.85714286,23.14285714,23.71428571,25,26,26.71428571,28.85714286,
@@ -46,26 +50,45 @@ measured_mm2 = [53.69,52.5,51.19,50.23,49.2,48.26,47.26,46.44,45.64,44.65,43.45,
                 4.29,3.91,3.32,3.09,2.87,2.3,0]
 model2 = np.poly1d(np.polyfit(raw_proximity1, measured_mm1, 5))
 print("Encoder Polynomial Model = ")
-print(model2)
-
+print("X Model 2",model2)
+print("========================")
 #add fitted polynomial line to scatterplot
-polyline = np.linspace(0, 110)       #polyline = np.linspace(1, 60, 50)
+"""polyline = np.linspace(0, 110)       #polyline = np.linspace(1, 60, 50)
 plt.scatter(raw_proximity2, measured_mm2)
 plt.plot(polyline, model2(polyline))
 plt.xlim([0,110])
 plt.ylim([0,60])
-plt.title("X Encoder: mMeasured mm vs Proximity Value")
+plt.title("X Encoder Model 2: Measured mm vs Proximity Value")
 plt.ylabel("Measured mm")
 plt.xlabel("Raw Proximity Value")
 
-plt.show()
+plt.show()"""
 
 """y2 = np.polyval(model2,55)
 print("measured mm =", y2)"""
 
+##Concatecating the arrays together for one large x-model
+x_prox_master = np.concatenate((raw_proximity1,raw_proximity2))
+x_mm_master = np.concatenate((measured_mm1,measured_mm2))
+x_mm_master = -np.sort(-x_mm_master)
+x_prox_master = np.sort(x_prox_master)
 
-y = np.polyval(model,55)
-print("measured mm =", y)
+x_master_model = np.poly1d(np.polyfit(x_prox_master, x_mm_master, 5))
+print("x Master Model:", x_master_model)
+print("========================")
+"""polyline = np.linspace(0, 110)       #polyline = np.linspace(1, 60, 50)
+plt.scatter(x_prox_master, x_mm_master)
+plt.plot(polyline, x_master_model(polyline))
+plt.xlim([0,110])
+plt.ylim([0,60])
+plt.title("X Encoder Master Model: Measured mm vs Proximity Value")
+plt.ylabel("Measured mm")
+plt.xlabel("Raw Proximity Value")
+
+plt.show()"""
+
+###Finding Standard Deviation of the x encoder tests
+
 
 
 ####Start of y encoder Tests Data###
@@ -85,7 +108,21 @@ encodery_prox = [6.0268,6.02354,6.4827,6.449,6.5117,6.557,6.8947,7.0396,7.2858,7
                  63.301,66.5994,67.6042,75.541,75.93208,79.570639,82.439,93.215]
 
 
+ymodel = np.poly1d(np.polyfit(encodery_prox, encodery_mm, 5))
+print("Encoder Polynomial Model = ")
+print("Y Model",ymodel)
+print("========================")
 
+"""
+polyline = np.linspace(0, 110)       #polyline = np.linspace(1, 60, 50)
+plt.scatter(encodery_prox, encodery_mm)
+plt.plot(polyline, ymodel(polyline))
+plt.xlim([0,110])
+plt.ylim([0,60])
+plt.title("Y Encoder: Measured mm vs Proximity Value")
+plt.ylabel("Measured mm")
+plt.xlabel("Raw Proximity Value")
 
+plt.show()"""
 
-
+##Standard Deviation of y
