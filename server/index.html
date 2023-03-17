@@ -146,7 +146,7 @@
 		var zJoystick = null;
 		var kJoystick = null;
 
-		const ws = new WebSocket('wss://brown-cat-45.loca.lt');
+		const ws = new WebSocket('wss');
 		ws.addEventListener('open', () => {
 			console.log('We are connected');
 			wsOpen = true;

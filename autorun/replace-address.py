@@ -19,7 +19,7 @@ line = file1.readline().rstrip()
 file1.close()
 
 # Open previous HTML file
-html_file = codecs.open('/home/pi/Desktop/control/server/index.html','r','utf-8')
+html_file = codecs.open('/home/pi/Desktop/tele-ultrasound-2022/server/index.html','r','utf-8')
 soup = BeautifulSoup(html_file, 'html.parser')
 strhtm = soup.prettify()
 html_lines = strhtm.splitlines()
@@ -54,7 +54,7 @@ html_lines[ws_location] = updated_line
 print(html_lines[ws_location])
 
 # Write updated file
-html_file_2 = codecs.open('/home/pi/Desktop/control/server/index.html','w','utf-8')
+html_file_2 = codecs.open('/home/pi/Desktop/tele-ultrasound-2022/server/index.html','w','utf-8')
 for element in html_lines:
     html_file_2.write(element + "\n")
 html_file_2.close()

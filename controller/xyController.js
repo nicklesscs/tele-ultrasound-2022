@@ -4,7 +4,7 @@ const MotorController = require(__dirname + '/../motors/motorController');
 
 let xyMotors = new MotorController();
 
-let xMotor = xyMotors.addMotor('x', 2, 4, 3);
+let xMotor = xyMotors.addMotor('x', 17, 22, 27);
 let yMotor = xyMotors.addMotor('y', 14, 18, 15);
 
 xMotor.setPosition(0);
