@@ -21,9 +21,9 @@ const http = require('http');
 const fs = require('fs');
 
 const PORT = 8080;
-const IP_ADDRESS = '130.215.175.244';
+const IP_ADDRESS = '130.215.125.155';
 
-fs.readFile('./gui.html', function (err, html) {
+fs.readFile('./index.html', function (err, html) {
   if (err) throw err;
 
   const server = http.createServer(function(request, response) {
