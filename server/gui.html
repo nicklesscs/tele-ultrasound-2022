@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.7.3/nipplejs.js"></script>
+
+  <script type="text/javascript" type="text/javascript">
+    var ros = new ROSLIB.Ros({
+      // url: 'ws://localhost:9090'            //may or may not give error with the sensor
+      //url: 'autoreg-208858.dyn.wpi.edu'
+      url: 'ws://130.215.125.155:9090'                 //may or may not give error with the sensor
+    });
+
+    ros.on('connection', function () {         //this will send a published message to the websocket
+      document.getElementById("status").innerHTML = "Connected";
+    });
+
+    ros.on('error', function (error) {                //will send error message
+      document.getElementById("status").innerHTML = "Error";
+    });
+
+    ros.on('close', function () {                      //will send closed message
+      document.getElementById("status").innerHTML = "Closed";
+    });
+
+    
+    //------------------------------listeners to assign topics to messages--------------------------------------
+    var txt_listener = new ROSLIB.Topic({            //can listern to this and get "chatter"'s output
+      ros: ros,
+      name: '/chatter',
+      messageType: 'std_msgs/String'
+    });
+
+
+    var cmd_vel_listener = new ROSLIB.Topic({         //subscribed to a twist message
+      ros: ros,
+      name: '/tf_polhemus',
+      messageType: 'tf2_msgs/TFMessage'
+    });
+    //----------------------------------------------------------------------------------------------------------
+   
+    txt_listener.subscribe(function (text) {                    //subscribes to the topic text publisher
+      document.getElementById("/chatter").innerHTML = text.data;
+      //move(2, 2, 2, 2, 2, 2);
+    }); 
+
+    
+    cmd_vel_listener.subscribe(function (vel) {
+      var position = vel.transforms[0].transform.translation;
+      var orientation = vel.transforms[0].transform.rotation;
+      var messageString = 'Position: (' + position.x + ',' + position.y + ',' + position.z + ')<br>' +
+                      'Orientation: (' + orientation.x + ',' + orientation.y + ',' + orientation.z + ',' + orientation.w + ')';
+      document.getElementById("/tf_polhemus").innerHTML = messageString;
+    });
+
+   
+    
+    //-----------established connections to the website for variables------------------------------------------------------
+    ros.on('connection', function () {      //will send the string we want to the server
+      document.getElementById("/chatter").innerHTML = text.data;
+    });
+
+    ros.on('connection', function () {      //test test for twist      
+      //document.getElementById("/tf_polhemus").innerHTML = JSON.stringify(vel);
+      document.getElementById("/tf_polhemus").innerHTML = messageString;
+      //document.getElementById("/tf_polhemus").innerHTML = JSON.stringify(messageString);
+    });
+    
+    //--------------------------------------------------------------------------------------------------------------------
+
+
+  </script>
+</head>
+
+<body>
+  <h1>Simple ROS Interface</h1>
+  <p>Connection status: <span id="status"></span></p>
+  <p>Last message on /txt_msg: <span id="/chatter"></span></p>
+  <p>Message from /tf_polhemus: <span id="/tf_polhemus"></span></p>
+<!--  <div id="zone_joystick" style="position: relative;"></div>-->
+</body>
+
+</html>
