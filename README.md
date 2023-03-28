@@ -1,4 +1,4 @@
-# teleultrasound
+# teleultrasound test
 
 ## Overall Architecture
 ![image](img/overall-architecture.png)
