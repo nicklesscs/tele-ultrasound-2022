@@ -1,4 +1,5 @@
 const WebSocket = require('ws');
+const ipc = require('node-ipc');
 
 const ws = new WebSocket('ws://130.215.175.244:8080');
 
@@ -12,6 +13,25 @@ ws.on('message', function incoming(data) {
 
 ws.on('close', function close() {
   console.log('disconnected from server');
+});
+
+
+ipc.config.id = 'client';
+ipc.config.retry = 1500;
+ipc.config.silent = true;
+
+ipc.connectTo('poseControl', function () {
+  ipc.of.poseControl.on('connect', function () {
+    console.log('connected to poseControl');
+  });
+
+  ipc.of.poseControl.on('disconnect', function () {
+    console.log('disconnected from poseControl');
+  });
+
+  ipc.of.poseControl.on('message', function (data) {
+    console.log('received message from poseControl:', data);
+  });
 });
 
 //const WebSocket = require('ws');
