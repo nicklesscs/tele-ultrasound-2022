@@ -16,9 +16,14 @@ ws.on('close', function close() {
 });
 
 
-ipc.config.id = 'client';
+// SETUP FOR IPC
+ipc.config.id = 'ws-server';
 ipc.config.retry = 1500;
 ipc.config.silent = true;
+//let tendonControlConnection = false;
+//let xyControlConnection = false;
+//let kzControlConnection = false;
+let poseControlConnection = false;
 
 ipc.connectTo('poseControl', function () {
   ipc.of.poseControl.on('connect', function () {
@@ -32,8 +37,21 @@ ipc.connectTo('poseControl', function () {
   ipc.of.poseControl.on('message', function (data) {
     console.log('received message from poseControl:', data);
   });
-});
 
+});
+ipc.connectTo('poseControl', function () {
+	poseControlConnection = true;
+	ipc.of.poseControl.on('connect', function () {
+		ipc.log('## connected to poseControl ##'.rainbow, ipc.config.delay);
+		ipc.of.poseControl.emit('message', 'hello');
+		console.log('ws-server connected to poseControl');
+	});
+	ipc.of.poseControl.on('disconnect', function () {
+		ipc.log('disconnected from world'.notice);
+		console.log('ws-server disconnected from kzControl');
+		poseControlConnection = false;
+	});
+});
 //const WebSocket = require('ws');
 //const ipc = require('node-ipc');
 //
