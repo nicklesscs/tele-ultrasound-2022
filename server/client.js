@@ -3,6 +3,7 @@ const ipc = require('node-ipc');
 
 const ws = new WebSocket('ws://130.215.175.244:8080');
 
+
 ws.on('open', function open() {
   console.log('connected to server');
 });
