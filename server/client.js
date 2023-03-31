@@ -51,7 +51,7 @@ ipc.connectTo('poseControl', function () {
 	ipc.of.poseControl.on('connect', function () {
 		ipc.log('## connected to poseControl ##'.rainbow, ipc.config.delay);
 		ipc.of.poseControl.emit('message', 'hello');
-		console.log('client connected to poseControl');
+		console.log('client connected to poseControl successfully');
 	});
 	ipc.of.poseControl.on('disconnect', function () {
 		ipc.log('disconnected from world'.notice);
