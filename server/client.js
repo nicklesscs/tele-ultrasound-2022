@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 const ipc = require('node-ipc');
 
-const ws = new WebSocket('ws://130.215.175.244:8080');
+const ws = new WebSocket('ws://130.215.120.242:8080');
 
 ws.on('open', function open() {
   console.log('Connected to server');
@@ -13,6 +13,8 @@ ws.on('message', function incoming(message) {
     if (data.type === 'tf_polhemus') {
       console.log('Received tf_polhemus data:', data);
     }
+    // Send tf_polhemus data to poseController via ipc
+    ipc.of.poseControl.emit('bodyData', data);
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
   }
@@ -30,16 +32,26 @@ ws.on('error', function error(error) {
   console.error(`WebSocket error: ${error}`);
 });
 
+// SETUP FOR IPC
 ipc.config.id = 'client';
 ipc.config.retry = 1500;
 ipc.config.silent = true;
+//let tendonControlConnection = false;
+//let xyControlConnection = false;
+//let kzControlConnection = false;
+let poseControlConnection = false;
 
-ipc.connectTo('server', function () {
-  ipc.of.server.on('connect', function () {
-    ipc.log('## Connected to server ##'.rainbow, ipc.config.delay);
-    ipc.of.server.emit('message', 'hello');
-  });
-  ipc.of.server.on('disconnect', function () {
-    ipc.log('Disconnected from server'.notice);
-  });
+
+ipc.connectTo('poseControl', function () {
+	poseControlConnection = true;
+	ipc.of.poseControl.on('connect', function () {
+		ipc.log('## connected to poseControl ##'.rainbow, ipc.config.delay);
+		ipc.of.poseControl.emit('message', 'hello');
+		console.log('client connected to poseControl');
+	});
+	ipc.of.poseControl.on('disconnect', function () {
+		ipc.log('disconnected from world'.notice);
+//		console.log('client disconnected from kzControl');
+		poseControlConnection = false;
+	});
 });
