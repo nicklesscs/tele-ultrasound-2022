@@ -13,13 +13,14 @@ ws.on('message', function incoming(message) {
   try {
     const data = JSON.parse(message);
     if (data.type === 'tf_polhemus') {
-      console.log('Received tf_polhemus data:', data);
+      // console.log('Received tf_polhemus data:', data);
     }
     // Send tf_polhemus data to poseController via ipc
-    ipc.of.poseControl.emit('bodyData', data);
+    ipc.of.poseControl.emit('messageData', data);
     connected = true;
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
+    
   }
 });
 
@@ -44,6 +45,7 @@ ipc.config.silent = true;
 //let xyControlConnection = false;
 //let kzControlCbodyDataonnection = false;
 let poseControlConnection = false;
+
 
 
 ipc.connectTo('poseControl', function () {
