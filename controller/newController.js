@@ -4,13 +4,12 @@ const MotorController = require(__dirname + '/../motors/motorController');
 const getTendonLengths = require('../controller/tendonLengths.js');
 
 var Polhemus = require(__dirname + '/../server/client')     ///might be this or the one below
-const {Viper} = require('./client.js');                     //might need to be a set datapoint
+// const {Viper} = require('./client.js');                     //might need to be a set datapoint
 
 //connect the kz motors
 let kzMotors = new MotorController();
 
 let kMotor = kzMotors.addMotor('k', 25, 7, 8);              //set up motors
-
 let zMotor = kzMotors.addMotor('z', 12, 20, 16);
 
 kMotor.setPosition(0);
@@ -77,7 +76,7 @@ function distanceToSetpoint(legLength) {
 	return (legLength - 54.85) * (200.0 / spoolCircum);
 }
 
-ipc.serve(function () {
+ipc.serve(function () {                                          //ipc for the tendons
 	console.log('tendonController server up');
 	ipc.server.on('pitchroll', function (data, socket) {
 		let tendonLengths = getTendonLengths(data.pitch, data.roll);
@@ -91,18 +90,20 @@ ipc.serve(function () {
 	});
 });
 
-ipc.server.start();
 
-
+//ipc.server.start();    //i dont know if we need this
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // //partition the data into readable chunks
 
-// xdirection = Polhemus.data.x
-// ydirection = Polhemus.data.y
-// zdirection = Polhemus.data.z
-// pitch =
-// roll =
-// yaw = 
+// xdirection = Viper.position.data.x;           //might work
+// ydirection = Viper.position.data.y;
+// zdirection = Viper.position.data.z;
+// pitch = Viper.orientation.x;
+// roll = Viper.orientation.y;
+// yaw =  Viper.orientation.z;
+
+//console.log(xdirection);
 
 // //set motor threshholds
 
