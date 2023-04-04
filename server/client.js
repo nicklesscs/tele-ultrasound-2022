@@ -62,10 +62,4 @@ ipc.connectTo('newController', function () {
 	});
 });
 
-// var Viper = {
-//   type: 'tf_polhemus',
-//   data: {
-//     position: { x: position.x, y: position.y, z: position.z },
-//     orientation: { x: orientation.x, y: orientation.y, z: orientation.z, w: orientation.w }
-//   }
-// };
+
