@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Controller Controls</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f1f1f1;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+		}
+
+		.button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		.button:hover {
+			background-color: #3e8e41;
+		}
+
+		.reset-button {
+			background-color: #f44336;
+		}
+
+		.reset-button:hover {
+			background-color: #d32f2f;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<button class="button" id="send-button">Send Data to Controller</button>
+		<button class="button reset-button" id="reset-button">Reset All Controllers</button>
+	</div>
+	<script>
+		const sendButton = document.getElementById("send-button");
+		sendButton.addEventListener("click", function() {
+			// send data to controller here
+			alert("Data sent to controller!");
+		});
+
+		const resetButton = document.getElementById("reset-button");
+		resetButton.addEventListener("click", function() {
+			// reset all controllers here
+			alert("All controllers reset!");
+		});
+	</script>
+</body>
+</html>
