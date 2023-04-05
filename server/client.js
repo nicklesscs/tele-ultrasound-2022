@@ -44,21 +44,21 @@ ipc.config.silent = true;
 //let tendonControlConnection = false;
 //let xyControlConnection = false;
 //let kzControlCbodyDataonnection = false;
-let poseControlConnection = false;
+let newControlConnection = false;
 
 
 
 ipc.connectTo('newController', function () {
-	poseControlConnection = true;
+	newControlConnection = true;
 	ipc.of.newController.on('connect', function () {
-		ipc.log('## connected to poseControl ##'.rainbow, ipc.config.delay);
+		ipc.log('## connected to newController ##'.rainbow, ipc.config.delay);
 		ipc.of.newController.emit('message', 'hello');
-		console.log('client connected to poseControl successfully');
+		console.log('client connected to newController successfully');
 	});
 	ipc.of.newController.on('disconnect', function () {
 		ipc.log('disconnected from world'.notice);
-		console.log('client disconnected from poseControl');
-		poseControlConnection = false;
+		console.log('client disconnected from newController');
+		newControlConnection = false;
 	});
 });
 
