@@ -13,10 +13,10 @@ ws.on('message', function incoming(message) {
   try {
     const data = JSON.parse(message);
     if (data.type === 'tf_polhemus') {
-      // console.log('Received tf_polhemus data:', data);
+       console.log('Received tf_polhemus data:', data);
     }
     // Send tf_polhemus data to poseController via ipc
-    ipc.of.poseControl.emit('messageData', data);
+    ipc.of.newController.emit('messageData', data);
     connected = true;
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
@@ -48,16 +48,18 @@ let poseControlConnection = false;
 
 
 
-ipc.connectTo('poseControl', function () {
+ipc.connectTo('newController', function () {
 	poseControlConnection = true;
-	ipc.of.poseControl.on('connect', function () {
+	ipc.of.newController.on('connect', function () {
 		ipc.log('## connected to poseControl ##'.rainbow, ipc.config.delay);
-		ipc.of.poseControl.emit('message', 'hello');
+		ipc.of.newController.emit('message', 'hello');
 		console.log('client connected to poseControl successfully');
 	});
-	ipc.of.poseControl.on('disconnect', function () {
+	ipc.of.newController.on('disconnect', function () {
 		ipc.log('disconnected from world'.notice);
 		console.log('client disconnected from poseControl');
 		poseControlConnection = false;
 	});
 });
+
+
