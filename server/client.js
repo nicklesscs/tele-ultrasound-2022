@@ -15,8 +15,10 @@ ws.on('message', function incoming(message) {
     if (data.type === 'tf_polhemus') {
        console.log('Received tf_polhemus data:', data);
     }
-    // Send tf_polhemus data to poseController via ipc
-    ipc.of.newController.emit('messageData', data);
+    // Send tf_polhemus data to controllers via ipc
+    ipc.of.kzController.emit('messageData', data);
+    ipc.of.xyController.emit('messageData', data);
+    ipc.of.tendonController.emit('messageData', data);
     connected = true;
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
@@ -90,9 +92,14 @@ ipc.connectTo('kzControl', function () {
 	});
 });
 
+//need to change the function:
+// 1. extract x,y,z data and rotation data from tf_polhmus data
+// 2. modify the data to the previous format
+// 3. send data to the correct controller.
+
 ipc.serve(function () {
-	console.log('bodyData server up');
-	ipc.server.on('bodyData', function (data, socket) {
+	console.log('messageData server up');
+	ipc.server.on('messageData', function (data, socket) {
 		let body = data;
 		//console.log(body);
 		// Send each message type to its intended handler
@@ -130,6 +137,8 @@ ipc.serve(function () {
 	});
 });
 
+
+//handle the data here
 function ijRotationHandler(data) {
 	// Checks for a connection to the tendonController
 	if (tendonControlConnection) {
