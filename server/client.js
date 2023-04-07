@@ -48,7 +48,7 @@ ws.on('message', function incoming(message) {
 	// Send tf_polhemus data to controllers via ipc
 	
 	//
-    ipc.of.tendonController.emit('messageData', data);
+    //ipc.of.tendonController.emit('messageData', data);
 
 
   } catch (error) {
