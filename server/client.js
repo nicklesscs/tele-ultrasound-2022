@@ -34,9 +34,10 @@ ws.on('message', function incoming(message) {
        console.log('orientation z', orientation.z)
        console.log('orientation w', orientation.w)
     }
-    // Send tf_polhemus data to controllers via ipc
-//    ipc.of.kzController.emit('messageData', data);
-//    ipc.of.xyController.emit('messageData', data);
+	// Send tf_polhemus data to controllers via ipc
+	//    ipc.of.kzController.emit('messageData', data);
+	//    ipc.of.xyController.emit('messageData', data);
+
     ipc.of.tendonController.emit('messageData', data);
     connected = true;
   } catch (error) {
@@ -44,6 +45,17 @@ ws.on('message', function incoming(message) {
     
   }
 });
+
+// private onStateChangeEvent = (event: any) => {
+//     console.log("reached here: " + event);
+//     ipc.of.tendonController.emit('messageData', data); // now correct this
+//   }  catch (error) {
+//     console.error(`Error parsing message: ${error}`);
+    
+//   }
+
+  
+
 
 ws.on('close', function close() {
   console.log('Disconnected from server');
