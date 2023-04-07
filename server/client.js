@@ -37,18 +37,18 @@ ws.on('message', function incoming(message) {
        ipc.of.kzControl.emit('position', {
         z: positionz
 });
+
+       ipc.of.kzControl.emit('orientation', {
+        w: orientationw
+});
       ipc.of.tendonControl.emit('orientation', {
         x:orientationx,
         y:orientationy,
         z:orientationz,
-        w:orientationw
 });
        connected = true;
     }
     // Send tf_polhemus data to controllers via ipc
-
-//    ipc.of.tendonController.emit('messageData', data);
-
 
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
@@ -142,7 +142,7 @@ ipc.serve(function () {
 				break;
 			case 'xyJoystick':
 				xyJoystickHandler(body.data);
-				//console.log(body.type);
+				//console.log(body.type)pitchroll;
 				//console.log('xyControlConnection: ' + xyControlConnection);
 				break;
 			case 'kJoystick':
