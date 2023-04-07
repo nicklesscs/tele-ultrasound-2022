@@ -48,13 +48,13 @@ ws.on('message', function incoming(message) {
 });
        connected = true;
     }
-    // Send tf_polhemus data to controllers via ipc
 
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
     
   }
 });
+
 
 ws.on('close', function close() {
   console.log('Disconnected from server');
