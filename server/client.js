@@ -16,30 +16,41 @@ ws.on('message', function incoming(message) {
     if (data.type === 'tf_polhemus') {
        const { orientation } = data.data;
        const { position } = data.data;
-       const {positionx} = position.x
-       const {positiony} = position.y
-       const {positionz} = position.z
-       const {orientationx} = orientation.x
-       const {orientationy} = orientation.y
-       const {orientationz} = orientation.z
-       const {orientationw} = orientation.w
+       const {x: positionx, y: positiony, z: positionz} = position;
+       const {x: orientationx, y: orientationy, z: orientationz, w: orientationw} = orientation;
+
 //       console.log('Received tf_polhemus data:', data);
-//       console.log('orientation',orientation);
-//       console.log('position', position)
-       console.log('position x', position.x)
-       console.log('position y', position.y)
-       console.log('position z', position.z)
-       console.log('orientation x', orientation.x)
-       console.log('orientation y', orientation.y)
-       console.log('orientation z', orientation.z)
-       console.log('orientation w', orientation.w)
+       console.log('Received tf_polhemus data');
+       console.log('position x', positionx);
+       console.log('position y', positiony);
+       console.log('position z', positionz);
+       console.log('orientation x', orientationx);
+       console.log('orientation y', orientationy);
+       console.log('orientation z', orientationz);
+       console.log('orientation w', orientationw);
+
+       ipc.of.xyControl.emit('position', {
+        x: positionx,
+        y: positiony,
+});
+
+       ipc.of.kzControl.emit('position', {
+        z: positionz
+});
+      ipc.of.tendonControl.emit('orientation', {
+        x:orientationx,
+        y:orientationy,
+        z:orientationz,
+        w:orientationw
+});
+       connected = true;
     }
 	// Send tf_polhemus data to controllers via ipc
-	//    ipc.of.kzController.emit('messageData', data);
-	//    ipc.of.xyController.emit('messageData', data);
-
+	
+	//
     ipc.of.tendonController.emit('messageData', data);
-    connected = true;
+
+
   } catch (error) {
     console.error(`Error parsing message: ${error}`);
     
