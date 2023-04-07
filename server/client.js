@@ -3,7 +3,8 @@ const WebSocket = require('ws');
 const ipc = require('node-ipc');
 let connected = false
 
-const ws = new WebSocket('ws://130.215.120.242:8080');
+
+const ws = new WebSocket('ws://130.215.213.241:8080');
 
 ws.on('open', function open() {
   console.log('Connected to server');
@@ -13,11 +14,29 @@ ws.on('message', function incoming(message) {
   try {
     const data = JSON.parse(message);
     if (data.type === 'tf_polhemus') {
-       console.log('Received tf_polhemus data:', data);
+       const { orientation } = data.data;
+       const { position } = data.data;
+       const {positionx} = position.x
+       const {positiony} = position.y
+       const {positionz} = position.z
+       const {orientationx} = orientation.x
+       const {orientationy} = orientation.y
+       const {orientationz} = orientation.z
+       const {orientationw} = orientation.w
+//       console.log('Received tf_polhemus data:', data);
+//       console.log('orientation',orientation);
+//       console.log('position', position)
+       console.log('position x', position.x)
+       console.log('position y', position.y)
+       console.log('position z', position.z)
+       console.log('orientation x', orientation.x)
+       console.log('orientation y', orientation.y)
+       console.log('orientation z', orientation.z)
+       console.log('orientation w', orientation.w)
     }
     // Send tf_polhemus data to controllers via ipc
-    ipc.of.kzController.emit('messageData', data);
-    ipc.of.xyController.emit('messageData', data);
+//    ipc.of.kzController.emit('messageData', data);
+//    ipc.of.xyController.emit('messageData', data);
     ipc.of.tendonController.emit('messageData', data);
     connected = true;
   } catch (error) {
