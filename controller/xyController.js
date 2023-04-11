@@ -55,6 +55,7 @@ ipc.serve(function () {
 		tilting = false;
 		console.log(data);
 		xVel = data.y;
+
 		yVel = data.x;
 	});
 
