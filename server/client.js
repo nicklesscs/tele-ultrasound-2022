@@ -113,7 +113,7 @@ ipc.connectTo('kzControl', function () {
 	ipc.of.kzControl.on('connect', function () {
 		ipc.log('## connected to kzControl ##'.rainbow, ipc.config.delay);
 		ipc.of.kzControl.emit('message', 'hello');
-		console.log('poseController connected to kzControl');
+		console.log('client connected to kzControl');
 	});
 	ipc.of.kzControl.on('disconnect', function () {
 		ipc.log('disconnected from world'.notice);
