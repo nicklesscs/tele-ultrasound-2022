@@ -126,3 +126,12 @@ plt.xlabel("Raw Proximity Value")
 plt.show()"""
 
 ##Standard Deviation of y
+
+
+
+def encoderDist(xx,yy):
+    x_dist_master = (-8.945 * (10**-8)) * (xx**5) + (2.741 * (10**-5) * (xx**4)) - (0.003206 * (xx**3)) + (0.1809 * (xx**2)) - (5.264 * (xx)) + 79.69
+    x_dist_1 = (-1.103 * (10**-7)) * (xx**5) + (3.267 * (10**-5) * (xx**4)) - (0.003674* (xx**3)) + (0.1984 * (xx**2)) - (5.503 * (xx)) + 80.13
+    y_dist = (-1.484 * (10**-7) *(yy**5)) + (4.025* (10**-5) *(yy**4)) - (0.004191 * (yy**3)) + (0.2127 * (yy**2)) - (5.648 * (yy)) + 78.02
+    return x_dist_master, x_dist_1, y_dist
+  
